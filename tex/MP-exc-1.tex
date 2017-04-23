@@ -1,0 +1,56 @@
+\documentclass{article}
+
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\usepackage{enumitem}
+\setlist{nosep} % or \setlist{noitemsep} to leave space around whole list
+
+\begin{document}
+
+\title{Programming Exercise 1: Flow Formulations}
+\author{Martin Sturm}
+\maketitle
+              
+\section{Introduction}
+
+\section{Single Commodity Flow}
+
+\paragraph{Model:} We formalized the problem with the following model.
+\newcommand{\edgesum}{\displaystyle \sum_{(i, j) \in A}}
+\newcommand{\edgesumrev}{\displaystyle \sum_{(j, i) \in A}}
+\newcommand{\vflow}{X_{ij}}
+\newcommand{\vflowrev}{X_{ji}}
+\newcommand{\vmodeone}{Y_{ij}^1}
+\newcommand{\vmodetwo}{Y_{ij}^2}
+\newcommand{\binaries}{\{0, 1\}}
+\newcommand{\nonnegint}{\mathbb{N}^0}
+
+\begin{equation}
+\begin{array}{r r c l r}
+\displaystyle \min & \edgesum {\vmodeone d_{ij}^1 + \vmodetwo d_{ij}^2 + \vflow  c_{ij}} \\
+\textrm{s.t.}  
+& \edgesumrev {\vflowrev} - \edgesum {\vflow}& = & b_i,& \forall i \in V \\
+& \vmodeone + \vmodetwo & \leq & 1, & \forall (i,j) \in A\\
+& \vmodeone u_{ij}^1 + \vmodetwo u_{ij}^2 & \leq & \vflow &  \forall (i,j) \in A\\
+& \vmodeone & \in & \binaries & \forall (i,j) \in A\\
+& \vmodetwo & \in & \binaries & \forall (i,j) \in A\\
+& \vflow & \in & \nonnegint  &  \forall (i,j) \in A\\
+\end{array}
+\end{equation}
+
+
+\paragraph{Variables} We introduce two sets of variables:
+\begin{itemize}
+	\item flow variables
+	\item edge variables
+	\item node variables
+\end{itemize}
+
+\paragraph{Objective} 
+\paragraph{Constraints} T
+\end{document}
