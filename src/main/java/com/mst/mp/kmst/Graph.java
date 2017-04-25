@@ -15,4 +15,6 @@ public interface Graph {
 	Set<Edge> getEdges();
 
 	double getWeight(Edge e);
+
+	double getWeightSum();
 }

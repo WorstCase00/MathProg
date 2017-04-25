@@ -52,6 +52,13 @@ public class GraphJGraphTImpl implements Graph {
 				.findFirst().get().getWeight();
 	}
 
+	@Override
+	public double getWeightSum() {
+		return graph.edgeSet().stream()
+				.map(e -> e.getWeight())
+				.reduce((w1, w2) -> w1 + w2).orElse(0d);
+	}
+
 	public static Builder builder(int nodes, int edges) {
 		return new Builder(nodes);
 	}

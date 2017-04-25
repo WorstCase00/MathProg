@@ -36,6 +36,11 @@ public abstract class BaseValidityTest {
 //	}
 //
 //	@Test
+//	public void testInstance03B() throws Exception {
+//		runInstance(BENCHMARK_LOADER.getInstance03B());
+//	}
+//
+//	@Test
 //	public void testInstance04A() throws Exception {
 //		runInstance(BENCHMARK_LOADER.getInstance04A());
 //	}

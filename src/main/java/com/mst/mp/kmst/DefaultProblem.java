@@ -49,4 +49,9 @@ public class DefaultProblem implements Problem {
 	public double getWeight(Edge e) {
 		return graph.getWeight(e);
 	}
+
+	@Override
+	public double getWeightSum() {
+		return graph.getWeightSum();
+	}
 }

@@ -35,10 +35,6 @@ public abstract class BaseSolver<T extends HasBinaryEdgeVariables> implements So
 				throw new RuntimeException(cplex.getStatus().toString());
 			}
 			Solution solution = createSolution(cplex, model, problem);
-			Map<String, Double> flow = filterVars(((BaseFlowCplexVariables) model).getFlowVars(), cplex);
-			Map<String, Double> nodes = filterVars(Sets.newHashSet(((BaseFlowCplexVariables) model).getNodeVars()), cplex);
-			Map<String, Double> edges = filterVars(Sets.newHashSet(((BaseFlowCplexVariables) model).getBinaryEdgeVariables()), cplex);
-
 			RunResult runResults = RunResultImpl.create(solution, 0L);
 			cplex.end();
 			return runResults;
@@ -77,7 +73,7 @@ public abstract class BaseSolver<T extends HasBinaryEdgeVariables> implements So
 		for (Edge edge : problem.getEdges()) {
 			double weight = problem.getWeight(edge);
 			if (edge.getSource() == 0) {
-				weight = 10000d; // TODO bound
+				weight = problem.getWeightSum();
 			}
 			IloIntVar variable = model.getBinaryEdgeVariable(edge);
 			expressions.add(cplex.prod(weight, variable));
