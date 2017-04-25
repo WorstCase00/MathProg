@@ -85,7 +85,7 @@ public abstract class BaseSolver<T extends HasBinaryEdgeVariables> implements So
 		return cplex.sum(expressions.toArray(new IloNumExpr[expressions.size()]));
 	}
 
-	protected void addEdgeSelectionLimit(HasBinaryEdgeVariables model, Problem problem, IloCplex cplex) throws IloException {
+	protected void addSelectionEqualities(HasBinaryEdgeVariables model, Problem problem, IloCplex cplex) throws IloException {
 		cplex.addEq(
 				cplex.sum(model.getBinaryEdgeVariables()),
 				cplex.constant(problem.getK())

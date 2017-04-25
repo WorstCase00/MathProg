@@ -21,28 +21,38 @@
 \section{Single Commodity Flow}
 
 \paragraph{Model:} We formalized the problem with the following model.
-\newcommand{\edgesum}{\displaystyle \sum_{(i, j) \in A}}
 \newcommand{\edgesumrev}{\displaystyle \sum_{(j, i) \in A}}
-\newcommand{\vflow}{X_{ij}}
-\newcommand{\vflowrev}{X_{ji}}
 \newcommand{\vmodeone}{Y_{ij}^1}
 \newcommand{\vmodetwo}{Y_{ij}^2}
-\newcommand{\binaries}{\{0, 1\}}
 \newcommand{\nonnegint}{\mathbb{N}^0}
+
+
+\newcommand{\binaries}{\{0, 1\}}
+\newcommand{\edgesum}{\displaystyle \sum_{(i, j) \in E}}
+\newcommand{\nodesum}{\displaystyle \sum_{i \in V}}
+\newcommand{\vflow}{F_{ij}}
+\newcommand{\vflowrev}{F_{ji}}
+\newcommand{\vedge}{X_{ij}}
+\newcommand{\vnode}{X_{i}}
+
 
 \begin{equation}
 \begin{array}{r r c l r}
-\displaystyle \min & \edgesum {\vmodeone d_{ij}^1 + \vmodetwo d_{ij}^2 + \vflow  c_{ij}} \\
+\displaystyle \min & \edgesum {\vedge w_e} \\
 \textrm{s.t.}  
-& \edgesumrev {\vflowrev} - \edgesum {\vflow}& = & b_i,& \forall i \in V \\
-& \vmodeone + \vmodetwo & \leq & 1, & \forall (i,j) \in A\\
-& \vmodeone u_{ij}^1 + \vmodetwo u_{ij}^2 & \leq & \vflow &  \forall (i,j) \in A\\
-& \vmodeone & \in & \binaries & \forall (i,j) \in A\\
-& \vmodetwo & \in & \binaries & \forall (i,j) \in A\\
-& \vflow & \in & \nonnegint  &  \forall (i,j) \in A\\
+
+& \edgesum \vedge & = & k & \\
+& \nodesum \vnode & = & k + 1 & \\
+& \displaystyle \sum_{(0, j) \in E} F_{0j} & = & k& \\
+& \displaystyle \sum_{j \in \delta^+} \vflow - \displaystyle \sum_{j \in \delta^-} \vflow& = & \vnode & \forall i \in V^+ \\
+& \edgesum F_{ij} & \leq & \vedge k & \\
+
+& \vflow, \vflowrev & \in & [0, k]  &  \forall (i,j) \in E\\
+& \vedge & \in & \binaries  &  \forall (i,j) \in E\\
+& \vnode & \in & \binaries  &  \forall i \in V^+\\
+
 \end{array}
 \end{equation}
-
 
 \paragraph{Variables} We introduce two sets of variables:
 \begin{itemize}

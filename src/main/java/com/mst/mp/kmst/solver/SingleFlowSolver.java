@@ -11,18 +11,18 @@ public class SingleFlowSolver extends BaseSolver<SingleFlowCplexVariables> {
 	protected SingleFlowCplexVariables createModel(Problem problem, IloCplex cplex) throws IloException {
 		SingleFlowCplexVariables model = SingleFlowCplexVariables.create(cplex, problem);
 		addObjectiveFunction(model, problem, cplex);
-		addEdgeSelectionLimit(model, problem, cplex);
-		addFlowConsumptionConstraints(model, cplex, problem);
+		addSelectionEqualities(model, problem, cplex);
 		addFlowSupplyConstraint(model, cplex, problem);
+		addFlowConsumptionConstraints(model, cplex, problem);
 		addLinkingConstraints(model, cplex, problem);
 		return model;
 	}
 
 	private void addLinkingConstraints(SingleFlowCplexVariables model, IloCplex cplex, Problem problem) throws IloException {
 		for (Edge edge : problem.getEdges()) {
-			cplex.addGe(
-					cplex.prod(100000, model.getBinaryEdgeVariable(edge)), // TODO bound
-					cplex.sum(model.getFlowVariables(edge))
+			cplex.addLe(
+					cplex.sum(model.getFlowVariables(edge)),
+					cplex.prod(problem.getK(), model.getBinaryEdgeVariable(edge))
 			);
 		}
 	}
