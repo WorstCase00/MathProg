@@ -29,7 +29,7 @@ public class MultiFlowCplexVariables extends BaseFlowCplexVariables {
 	}
 
 	private static Map<List<Integer>, IloNumVar> createFlowVariables(IloCplex cplex, Problem problem) throws IloException {
-		Map<List<Integer>, IloNumVar> variables = Maps.newHashMap(); // TODO no flow vars for outgoing flow for i = k
+		Map<List<Integer>, IloNumVar> variables = Maps.newHashMap();
 		for (int k = 1; k < problem.getNodes(); k++) {
 			for (Edge edge : problem.getEdges()) {
 				IloNumVar var = cplex.numVar(0d,

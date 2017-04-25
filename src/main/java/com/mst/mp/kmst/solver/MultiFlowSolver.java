@@ -10,9 +10,9 @@ public class MultiFlowSolver extends BaseSolver<MultiFlowCplexVariables>  {
 	@Override
 	protected MultiFlowCplexVariables createModel(Problem problem, IloCplex cplex) throws IloException {
 		MultiFlowCplexVariables model = MultiFlowCplexVariables.create(cplex, problem);
-		addFlowEdgeLinking(model, problem, cplex);
 		addSelectionEqualities(model, problem, cplex);
 		addFlowConstraints(model, problem, cplex);
+		addFlowEdgeLinking(model, problem, cplex);
 		addObjectiveFunction(model, problem, cplex);
 		return model;
 	}
