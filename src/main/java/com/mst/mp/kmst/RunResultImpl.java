@@ -47,7 +47,15 @@ public class RunResultImpl implements RunResult {
 		return solution;
 	}
 
-	public static RunResultImpl create(Solution solution, long runningTimeMs) {
-		return new RunResultImpl(solution, runningTimeMs, 0L, 0L);
+	public static RunResultImpl createEmpty(Solution solution) {
+		return new RunResultImpl(solution, 0L, 0L, 0L);
+	}
+
+
+	public static RunResultImpl createForStandard(
+			Solution solution,
+			long runningTime,
+			long numberOfBranchAndBoundNodes) {
+		return new RunResultImpl(solution, runningTime, numberOfBranchAndBoundNodes, 0L);
 	}
 }

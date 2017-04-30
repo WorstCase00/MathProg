@@ -13,3 +13,5 @@ tex/MP-exc-1.log
 tex/MP-exc-1.out
 tex/MP-exc-1.pdf
 tex/MP-exc-1.synctex.gz
+*.bbl
+*.blg

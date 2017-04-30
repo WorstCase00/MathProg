@@ -43,4 +43,7 @@ public class SingleFlowSolver extends BaseSolver<SingleFlowCplexVariables> {
 		}
 	}
 
+	public static SingleFlowSolver create() {
+		return new SingleFlowSolver();
+	}
 }

@@ -65,4 +65,7 @@ public class MultiFlowSolver extends BaseSolver<MultiFlowCplexVariables>  {
 		}
 	}
 
+	public static MultiFlowSolver create() {
+		return new MultiFlowSolver();
+	}
 }

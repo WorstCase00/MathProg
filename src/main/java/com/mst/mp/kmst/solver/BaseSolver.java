@@ -26,7 +26,7 @@ public abstract class BaseSolver<T extends HasBinaryEdgeVariables> implements So
 	public RunResult solve(Problem problem) {
 		try {
 			if (problem.getK() < 2) {
-				return RunResultImpl.create(DefaultSolution.createEmpty(problem), 0L);
+				return RunResultImpl.createEmpty(DefaultSolution.createEmpty(problem));
 			}
 			IloCplex cplex = new IloCplex();
 			T model = createModel(problem, cplex);
@@ -35,7 +35,10 @@ public abstract class BaseSolver<T extends HasBinaryEdgeVariables> implements So
 				throw new RuntimeException(cplex.getStatus().toString());
 			}
 			Solution solution = createSolution(cplex, model, problem);
-			RunResult runResults = RunResultImpl.create(solution, 0L);
+			RunResult runResults = RunResultImpl.createForStandard(
+					solution,
+					(long) cplex.getCplexTime(),
+					(long) cplex.getNnodes());
 			cplex.end();
 			return runResults;
 		} catch (IloException e) {
@@ -43,16 +46,7 @@ public abstract class BaseSolver<T extends HasBinaryEdgeVariables> implements So
 		}
 	}
 
-	static Map<String, Double> filterVars(Collection<? extends IloNumExpr> vars, IloCplex cplex) throws IloException {
-		Map<String, Double> assignments = Maps.newHashMap();
-		for (IloNumExpr var : vars) {
-			Double value = cplex.getValue(var);
-			if (value > 0) {
-				assignments.put(var.toString(), value);
-			}
-		}
-		return assignments;
-	}
+
 
 	private Solution createSolution(IloCplex cplex, T model, Problem problem) throws IloException {
 		Set<Edge> edges = Sets.newHashSetWithExpectedSize(problem.getK() - 1);
@@ -93,4 +87,16 @@ public abstract class BaseSolver<T extends HasBinaryEdgeVariables> implements So
 	}
 
 	protected abstract T createModel(Problem problem, IloCplex cplex) throws IloException;
+
+	// static helper for debugging
+	static Map<String, Double> filterVars(Collection<? extends IloNumExpr> vars, IloCplex cplex) throws IloException {
+		Map<String, Double> assignments = Maps.newHashMap();
+		for (IloNumExpr var : vars) {
+			Double value = cplex.getValue(var);
+			if (value > 0) {
+				assignments.put(var.toString(), value);
+			}
+		}
+		return assignments;
+	}
 }

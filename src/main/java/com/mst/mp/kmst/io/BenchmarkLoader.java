@@ -12,90 +12,98 @@ public class BenchmarkLoader {
 
 	public BenchmarkInstance getInstance01A() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(0);
-		return runTest(key, OptimalSolutions.getLoK(key));
+		return load(key, OptimalSolutions.getLoK(key));
 	}
 
 	public BenchmarkInstance getInstance02A() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(1);
-		return runTest(key, OptimalSolutions.getLoK(key));
+		return load(key, OptimalSolutions.getLoK(key));
 	}
 
 	public BenchmarkInstance getInstance03A() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(2);
-		return runTest(key, OptimalSolutions.getLoK(key));
+		return load(key, OptimalSolutions.getLoK(key));
 	}
 
 	public BenchmarkInstance getInstance04A() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(3);
-		return runTest(key, OptimalSolutions.getLoK(key));
+		return load(key, OptimalSolutions.getLoK(key));
 	}
 
 	public BenchmarkInstance getInstance05A() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(4);
-		return runTest(key, OptimalSolutions.getLoK(key));
+		return load(key, OptimalSolutions.getLoK(key));
 	}
 
 	public BenchmarkInstance getInstance06A() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(5);
-		return runTest(key, OptimalSolutions.getLoK(key));
+		return load(key, OptimalSolutions.getLoK(key));
 	}
 
 	public BenchmarkInstance getInstance07A() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(6);
-		return runTest(key, OptimalSolutions.getLoK(key));
+		return load(key, OptimalSolutions.getLoK(key));
 	}
 
 	public BenchmarkInstance getInstance08A() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(7);
-		return runTest(key, OptimalSolutions.getLoK(key));
+		return load(key, OptimalSolutions.getLoK(key));
 	}
 
 	public BenchmarkInstance getInstance01B() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(0);
-		return runTest(key, OptimalSolutions.getHiK(key));
+		return load(key, OptimalSolutions.getHiK(key));
 	}
 
 	public BenchmarkInstance getInstance02B() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(1);
-		return runTest(key, OptimalSolutions.getHiK(key));
+		return load(key, OptimalSolutions.getHiK(key));
 	}
 
 	public BenchmarkInstance getInstance03B() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(2);
-		return runTest(key, OptimalSolutions.getHiK(key));
+		return load(key, OptimalSolutions.getHiK(key));
 	}
 
 	public BenchmarkInstance getInstance04B() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(3);
-		return runTest(key, OptimalSolutions.getHiK(key));
+		return load(key, OptimalSolutions.getHiK(key));
 	}
 
 	public BenchmarkInstance getInstance05B() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(4);
-		return runTest(key, OptimalSolutions.getHiK(key));
+		return load(key, OptimalSolutions.getHiK(key));
 	}
 
 	public BenchmarkInstance getInstance06B() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(5);
-		return runTest(key, OptimalSolutions.getHiK(key));
+		return load(key, OptimalSolutions.getHiK(key));
 	}
 
 	public BenchmarkInstance getInstance07B() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(6);
-		return runTest(key, OptimalSolutions.getHiK(key));
+		return load(key, OptimalSolutions.getHiK(key));
 	}
 
 	public BenchmarkInstance getInstance08B() throws IOException {
 		String key = OptimalSolutions.getOrderedInstanceKeys().get(7);
-		return runTest(key, OptimalSolutions.getHiK(key));
+		return load(key, OptimalSolutions.getHiK(key));
 	}
 
-	private BenchmarkInstance runTest(String key, int k) throws IOException {
+	private BenchmarkInstance load(String key, int k) throws IOException {
 		return new BenchmarkInstance(
 				key,
 				new DefaultProblem(
 						GRAPH_LOADER.loadInstanceKey(key),
 						k),
 				OptimalSolutions.getValue(key, k));
+	}
+
+	public BenchmarkInstance getLoInstance(String instanceKey) throws IOException {
+		return load(instanceKey, OptimalSolutions.getLoK(instanceKey));
+	}
+
+	public BenchmarkInstance getHiInstance(String instanceKey) throws IOException {
+		return load(instanceKey, OptimalSolutions.getLoK(instanceKey));
 	}
 }
