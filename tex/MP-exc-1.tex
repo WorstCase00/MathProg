@@ -17,9 +17,11 @@
 \maketitle
               
 \section{Introduction}
-artificial edge handling
+\paragraph{} The purpose of this document is to summarize our findings of the first programming exercise on the resolution of the k-node MST problem with CPLEX. For this exercise we chose to compare the Single Commodity Flow formulation with its Multi Commodity counterpart. We chose to implement our models and run the experiments with Java using CPLEX's provided API. The source code of our implementation will be sent with this document and will be available in a code repository\footnote{https://github.com/WorstCase00/MathProg}.\\
+\paragraph{} In order to use the provided instances we needed to handle the artificial start node with its associated edges to all of the real nodes. Note that for the implementation we chose to model this by assigning a high enough weight value to all of these artificial edges to get CPLEX to use only one of them to get the flows into the real graph. When constructing the actual solution we disregard the chosen edge again.\\
+\paragraph{} The results of our experiments are summarized in the last section of this report and show the validity of this approach since our optimal solutions are the ones expected.
 
-\section{Single Commodity Flow}
+\section{Single Commodity Flow (SCF)}
 
 \paragraph{Model:}
 \newcommand{\binaries}{\{0, 1\}}
@@ -50,22 +52,25 @@ artificial edge handling
 \end{array}
 \end{equation}
 
-\paragraph{Variables} We introduce two sets of variables:
+\paragraph{Variables}We introduce two sets of variables:
 \begin{itemize}
 	\item flow: $\vflow \in [0, k]$ models the real valued flow over an edge. Note that flow is directed which is why we introduce two variables per edge of the original graph, except for the edges adjacent to $0$ where only outgoing flow is needed.
 	\item edge: binary decision variables for edges of the original graph.
 	\item node: binary decision variables for nodes of the original graph excluding the artificial source node. 
 \end{itemize}
 
-\paragraph{Objective} The objective is to minimize the weighted sum of all selected edges. Note that this value includes the weight of the artificial source edges which has to be subtracted to obtain the real solution value.
+\paragraph{Objective}The objective is to minimize the weighted sum of all selected edges. Note that this value includes the weight of the artificial source edges which has to be subtracted to obtain the real solution value.
 \paragraph{Constraints}
 \begin{itemize}
 	\item edge selection: $k$ edges are in the solution.
-	\item node selection: $k + 1$ nodes are in the solution. TODO check if this is correct
+	\item node selection: $k + 1$ nodes are in the solution.
+	\item flow supply: flow of quantity $k$ is supplied into the network.
+	\item flow consumption: node $i$ consumes one unit of flow if it is selected
+	\item linking constraint for flow and edge selection
 \end{itemize}
 
 
-\section{Multi Commodity Flow}
+\section{Multi Commodity Flow (MCF)}
 
 \paragraph{Model:}
 \newcommand{\vkflow}{F_{ijk}}
@@ -92,21 +97,48 @@ artificial edge handling
 
 \end{array}
 \end{equation}
-\paragraph{Variables} We introduce two sets of variables:
+\paragraph{Variables}We introduce two sets of variables:
 \begin{itemize}
-	\item flow variables
-	\item edge variables
-	\item node variables
+	\item flow: in contrast to the SCF formulation there is a set of flow variables for every commodity $k$ which represent the flow for a given node. Note that this variable is now bound by 1.
+	\item edge: as before these are the binary decision variables for each edge in the graph.
+	\item node: as in the SCF model this indicates if a given node is selected for the solution.
 \end{itemize}
 
-\paragraph{Objective} 
+\paragraph{Objective}The objective function is the same as in the previous model. 
+
 \paragraph{Constraints}
+\begin{itemize}
+	\item edge selection: $k$ edges are in the solution
+	\item node selection: $k + 1$ nodes are in the solution
+	\item flow supply: flow is supplied into the network of the associated node if it is selected
+	\item flow preservation: flows for other nodes are preserved
+	\item flow consumption: node $k$ consumes its flow if it is selected
+	\item linking constraint for flow and edge selection
+\end{itemize}
 
 \section{Results}
 
-\subsection{Computational Results}
-
-\subsection{Interpretation}
-
-
+In the following table we summarize the computational results for and compare the two formulations. This is done by comparing three quantities:
+\begin{itemize}
+	\item Objective: The objective value of the formulations. This is the same for all the presented results and show that we found the known optimal values for each solved instance.
+	\item Time: This shows the CPU time used by CPLEX to solve the given model. Note that we did not use wall clock time and do not include the time spent on building the model.
+	\item Nodes: We furthermore give the number of branch and bound nodes CPLEX used during the computation.
+\end{itemize}
+\begin{tabular}{ l r r r r r r}
+	Instance & SCF  & MCF  & SCF t [s] & MCF t [s] & SCF nodes & MCF nodes \\ \midrule
+	g01-2 & 46 & 46 & 0 & 0 & 0 & 0 \\
+	g01-5 & 477 & 477 & 0 & 0 & 0 & 0 \\
+	g02-4 & 373 & 373 & 0 & 2 & 0 & 142 \\
+	g02-10 & 1390 & 1390 & 0 & 32 & 0 & 3183 \\
+	g03-10 & 725 & 725 & 2 & 2117 & 655 & 6597 \\
+	g03-25 & 3074 & - & 607 & - & 581643 & - \\
+	g04-14 & 909 & - & 12 & - & 8897 & - \\
+	g04-35 & 3292 & - & 286 & - & 131303 & - \\
+	g05-20 & 1235 & - & 78 & - & 26888 & - \\
+	g05-50 & 4898 & - & 10268 & - & 3425038 & - \\
+\end{tabular}\\
+The table shows that we have not been able to solve all the instances in a reasonable time frame. We are able to present results for the first five instances up to 100 nodes. The data at hand shows that the SCF formulation clearly outperforms the MCF formulation which only delivered results for the first three instances.\\
+We also noted that for the SFCF formulation CPLEX did not branch at all for the first two graphs. This can be explained by additional heuristics the solver uses to find solutions in the first node.\\
+Another interesting fact is the significant influence of $k$ to the difficulty of the problem. Still this is not too surprising from an intuitive point of view, given the fact that we are optimizing over the subset of edges of the base graph and the number of combinations reaches a maximum when $k$ equals $n/2$.\\
+Still we observe that the size of the problem space is not the only criteria for the running time as CPLEX even solves g04-35 fast than g03-25 for the SCF formulation.
 \end{document}

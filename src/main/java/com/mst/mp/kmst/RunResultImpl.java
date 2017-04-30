@@ -1,5 +1,7 @@
 package com.mst.mp.kmst;
 
+import com.google.common.base.MoreObjects;
+
 public class RunResultImpl implements RunResult {
 	private final Solution solution;
 	private final long runningTime;
@@ -47,10 +49,19 @@ public class RunResultImpl implements RunResult {
 		return solution;
 	}
 
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("solution", solution)
+				.add("runningTime", runningTime)
+				.add("numberOfBranchAndBoundNodes", numberOfBranchAndBoundNodes)
+				.add("numberOfViolatedInequalities", numberOfViolatedInequalities)
+				.toString();
+	}
+
 	public static RunResultImpl createEmpty(Solution solution) {
 		return new RunResultImpl(solution, 0L, 0L, 0L);
 	}
-
 
 	public static RunResultImpl createForStandard(
 			Solution solution,

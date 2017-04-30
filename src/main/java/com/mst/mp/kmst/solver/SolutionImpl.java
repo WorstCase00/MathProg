@@ -1,5 +1,6 @@
 package com.mst.mp.kmst.solver;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Sets;
 import com.mst.mp.kmst.Edge;
 import com.mst.mp.kmst.Problem;
@@ -9,13 +10,13 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class DefaultSolution implements Solution {
+public class SolutionImpl implements Solution {
 
 	private final Set<Edge> edges;
 	private final Set<Integer> nodes;
 	private final Problem problem;
 
-	private DefaultSolution(Set<Edge> edges, Set<Integer> nodes, Problem problem) {
+	private SolutionImpl(Set<Edge> edges, Set<Integer> nodes, Problem problem) {
 		this.edges = edges;
 		this.nodes = nodes;
 		this.problem = problem;
@@ -41,11 +42,21 @@ public class DefaultSolution implements Solution {
 		return nodes;
 	}
 
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("cost", getCost())
+				.add("edges", edges)
+				.add("nodes", nodes)
+				.add("problem", problem)
+				.toString();
+	}
+
 	public static Solution createEmpty(Problem problem) {
 		if (problem.getK() == 0) {
-			return new DefaultSolution(Collections.emptySet(), Collections.emptySet(), problem);
+			return new SolutionImpl(Collections.emptySet(), Collections.emptySet(), problem);
 		} else {
-			return new DefaultSolution(Collections.emptySet(), Sets.newHashSet(1), problem);
+			return new SolutionImpl(Collections.emptySet(), Sets.newHashSet(1), problem);
 		}
 	}
 
@@ -57,6 +68,6 @@ public class DefaultSolution implements Solution {
 			solutionNodes.add(edge.getTarget());
 		});
 		solutionNodes.remove(0);
-		return new DefaultSolution(solutionEdges, solutionNodes, problem);
+		return new SolutionImpl(solutionEdges, solutionNodes, problem);
 	}
 }

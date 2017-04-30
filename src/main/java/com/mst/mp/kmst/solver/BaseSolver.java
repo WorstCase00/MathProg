@@ -26,18 +26,21 @@ public abstract class BaseSolver<T extends HasBinaryEdgeVariables> implements So
 	public RunResult solve(Problem problem) {
 		try {
 			if (problem.getK() < 2) {
-				return RunResultImpl.createEmpty(DefaultSolution.createEmpty(problem));
+				return RunResultImpl.createEmpty(SolutionImpl.createEmpty(problem));
 			}
 			IloCplex cplex = new IloCplex();
+			cplex.setParam(IloCplex.StringParam.ClockType,1);
 			T model = createModel(problem, cplex);
+			double startTimeStamp = cplex.getCplexTime();
 			cplex.solve();
+			double endTimeStamp = cplex.getCplexTime();
 			if(!cplex.getStatus().equals(IloCplex.Status.Optimal)) {
 				throw new RuntimeException(cplex.getStatus().toString());
 			}
 			Solution solution = createSolution(cplex, model, problem);
 			RunResult runResults = RunResultImpl.createForStandard(
 					solution,
-					(long) cplex.getCplexTime(),
+					(long) (endTimeStamp - startTimeStamp),
 					(long) cplex.getNnodes());
 			cplex.end();
 			return runResults;
@@ -55,7 +58,7 @@ public abstract class BaseSolver<T extends HasBinaryEdgeVariables> implements So
 				edges.add(edge);
 			}
 		}
-		return DefaultSolution.create(edges, problem);
+		return SolutionImpl.create(edges, problem);
 	}
 
 	protected void addObjectiveFunction(HasBinaryEdgeVariables model, Problem problem, IloCplex cplex) throws IloException {
